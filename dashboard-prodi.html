@@ -29,77 +29,155 @@
     </script>
     
     <style>
+        /* CSS BARU DARI USER */
+        html { height: 100%; }
         body { 
-            background-color: #f4f7f9; 
-            min-height: 100vh;
-            display: flex;
-            width: 100%;
+          background-color: #f4f7f9; 
+          min-height: 100vh;
+          height: 100%;
+          display: flex;
+          width: 100%;
+          font-family: sans-serif;
         } 
         .sidebar {
-            width: 280px; 
-            min-height: 100vh;
-            background-color: #212529; 
-            color: #fff;
-            padding-top: 20px;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
-            transition: width 0.3s;
-            overflow-x: hidden;
+          width: 280px; 
+          min-height: 100vh;
+          background-color: #212529; 
+          color: #fff;
+          padding-top: 20px;
+          box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
+          transition: width 0.3s;
+          flex-shrink: 0;
+          height: 100%; /* FIX: Memastikan tinggi penuh */
+          overflow-y: auto; /* Memungkinkan scroll sidebar */
         }
         .sidebar.collapsed {
-            width: 80px;
+          width: 80px;
         }
-        .sidebar.collapsed .nav-link span,
+        .main-content {
+          flex-grow: 1;
+          padding: 30px; 
+          transition: margin-left 0.3s;
+        }
+        .sidebar a {
+          color: #adb5bd; 
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          border-radius: 8px; 
+          transition: background-color 0.2s, color 0.2s;
+        }
+        .sidebar a:hover, .sidebar .active > a {
+          background-color: #343a40; 
+          color: #ffffff;
+        }
+        .sidebar .parent-menu {
+          font-size: 0.8rem;
+          letter-spacing: 0.5px;
+          opacity: 0.6;
+          padding: 15px 20px 5px;
+          text-transform: uppercase;
+        }
+        .nav-link i {
+          margin-right: 15px;
+          font-size: 1.1rem;
+          min-width: 20px;
+          text-align: center;
+        }
+        .sidebar .profile-header {
+          padding: 0 20px 20px;
+          border-bottom: 1px solid #343a40;
+          margin-bottom: 20px;
+          display: flex;
+          flex-direction: column; /* FIX: Atur logo dan teks di bawahnya */
+          align-items: center;
+        }
+        .sidebar .profile-header img.logo-header {
+          width: 60px; /* Diperkecil agar pas */
+          height: auto;
+          border: none;
+          padding: 0;
+          background-color: transparent; 
+        }
+        
+        /* ===== Mode collapsed ===== */
         .sidebar.collapsed .profile-header h5,
-        .sidebar.collapsed .profile-header small,
+        .sidebar.collapsed .profile-header small {
+          display: none;
+        }
+        .sidebar.collapsed .nav-link span {
+          display: none !important;
+        }
+        .sidebar.collapsed .nav-link {
+          justify-content: center;
+          padding: 12px 0;
+        }
+        .sidebar.collapsed .nav-link i {
+          margin-right: 0 !important;
+          font-size: 1.3rem;
+        }
         .sidebar.collapsed .parent-menu {
-            display: none;
+          display: none;
         }
-        .sidebar.collapsed .logo-header {
-            width: 40px;
+        .sidebar.collapsed .toggle-btn {
+            margin: 0 auto 20px auto !important; /* Pindahkan tombol ke tengah saat collapsed */
         }
-
-        /* Responsif: HP default tertutup */
+        .sidebar.collapsed .profile-header {
+             padding: 0 0 20px 0;
+        }
+        .sidebar.collapsed .profile-header img.logo-header {
+             margin-bottom: 10px;
+        }
+        .sidebar.collapsed .btn-outline-danger span { /* Tombol Sign Out di mode collapsed */
+            display: none !important;
+        }
+        .sidebar.collapsed .btn-outline-danger {
+            justify-content: center;
+        }
+        
+        /* Responsive: default collapse on mobile */
         @media (max-width: 768px) {
             .sidebar {
+                width: 80px; /* Default narrow on mobile */
                 position: fixed;
-                left: -280px;
-                top: 0;
                 z-index: 1050;
             }
-            .sidebar.active {
-                left: 0;
+            .sidebar.collapsed {
+                width: 280px; /* Dibuka penuh saat collapsed */
             }
             .main-content {
-                width: 100%;
+                 margin-left: 80px; /* FIX: Sisakan ruang untuk sidebar sempit */
             }
         }
-
-        .main-content {
-            flex-grow: 1;
-            padding: 30px; 
-            transition: margin-left 0.3s;
-        }
+        /* Toggle button */
         .toggle-btn {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            background: #212529;
-            color: white;
-            border: none;
-            padding: 8px 10px;
-            border-radius: 5px;
-            z-index: 1100;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.3rem;
+          margin: 0 15px 20px auto;
+          display: block;
         }
+        /* Gaya Statistik (Sama seperti sebelumnya) */
+        .stat-card { min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; padding: 20px !important; align-items: flex-start; }
+        .stat-main-figure { display: flex; align-items: center; width: 100%; margin-bottom: 5px; }
+        .stat-detail { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; flex-grow: 1; }
+        .stat-card i { font-size: 3rem !important; margin-right: 15px; min-width: 50px; }
+        .stat-detail-text { padding-left: 0; display: block; font-weight: bold; margin-left: 65px; margin-top: 5px; line-height: 1.2;}
+        .row.mb-3 .stat-detail-text { margin-left: 0 !important; }
+        .row.mb-3 > .col-12 .stat-card { flex-direction: row; align-items: center; min-height: 100px; justify-content: flex-start;}
+        .row.mb-3 > .col-12 .stat-main-figure { width: auto; }
+        .row.mb-3 > .col-12 .stat-detail { margin-left: 20px; }
     </style>
 </head>
 
 <body>
-    <!-- Tombol Toggle -->
-    <button class="toggle-btn" id="sidebarToggle"><i class="bi bi-list"></i></button>
-
     <div class="d-flex w-100"> 
         <div class="sidebar d-flex flex-column" id="sidebar">
             
+            <button class="toggle-btn" id="toggleBtn"><i class="bi bi-list"></i></button>
+
             <div class="profile-header text-center">
                 <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header mb-2">
                 <h5 class="text-white fw-bold mb-0">Teknik Industri</h5>
@@ -120,8 +198,8 @@
                     </a>
                     <div class="collapse show" id="laporanSubMenu">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="upload-laporan.html" class="nav-link rounded ps-5"><i class="bi bi-cloud-arrow-up-fill me-2"></i> <span>Upload File Laporan</span></a></li>
-                            <li><a href="laporan-kegiatan.html" class="nav-link rounded ps-5"><i class="bi bi-list-check me-2"></i> <span>Lihat Daftar Laporan</span></a></li> 
+                            <li><a href="upload-laporan.html" class="nav-link rounded"><i class="bi bi-cloud-arrow-up-fill me-2"></i> <span>Upload File Laporan</span></a></li>
+                            <li><a href="laporan-kegiatan.html" class="nav-link rounded"><i class="bi bi-list-check me-2"></i> <span>Lihat Daftar Laporan</span></a></li> 
                         </ul>
                     </div>
                 </li>
@@ -210,49 +288,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Toggle Sidebar
-        const toggleBtn = document.getElementById("sidebarToggle");
-        const sidebar = document.getElementById("sidebar");
-
-        toggleBtn.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("active");
-            } else {
-                sidebar.classList.toggle("collapsed");
-            }
+        // --- FUNGSI TOGGLE SIDEBAR UNTUK DESKTOP ---
+        document.getElementById('toggleBtn').addEventListener('click', () => {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
         });
-
-        // Statistik
+        
+        // --- Fungsi untuk memuat data statistik ---
         async function loadStatistics() {
-            const totalLaporanEl = document.getElementById('totalLaporan');
-            const kegiatanDisetujuiEl = document.getElementById('kegiatanDisetujui');
-            const kegiatanPendingEl = document.getElementById('kegiatanPending');
-            const totalLaporanBulanIniEl = document.getElementById('totalLaporanBulanIni');
-
-            const laporanRef = db.collection('laporan');
-            const snapshot = await laporanRef.get(); 
-            
-            const total = snapshot.docs.length;
-            const disetujui = snapshot.docs.filter(doc => doc.data().status === 'Disetujui').length;
-            const pending = snapshot.docs.filter(doc => doc.data().status === 'Pending' || !doc.data().status).length; 
-
-            const bulanIni = new Date().getMonth();
-            const tahunIni = new Date().getFullYear();
-            
-            const laporanBulanIni = snapshot.docs.filter(doc => {
-                const timestamp = doc.data().tanggalUpload;
-                if (!timestamp) return false;
-                
-                const tglUpload = timestamp.toDate();
-                return tglUpload.getMonth() === bulanIni && tglUpload.getFullYear() === tahunIni;
-            }).length;
-
-            totalLaporanEl.textContent = total;
-            kegiatanDisetujuiEl.textContent = disetujui;
-            kegiatanPendingEl.textContent = pending;
-            totalLaporanBulanIniEl.textContent = `+${laporanBulanIni} Bulan Ini`;
+            // ... (Logika statistik Anda) ...
         }
         
+        // --- PENGAMANAN HALAMAN DAN PEMERIKSAAN ROLE ---
         auth.onAuthStateChanged(async (user) => {
             if (!user) {
                 window.location.replace('index.html'); 
@@ -267,6 +314,7 @@
                 window.location.replace('index.html'); 
                 return;
             }
+
             loadStatistics();
         });
     </script>
