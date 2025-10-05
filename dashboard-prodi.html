@@ -29,156 +29,74 @@
     </script>
     
     <style>
-        /* [GAYA UMUM] */
+        /* [GAYA KHUSUS DASHBOARD] */
         html { height: 100%; }
         body { 
-          background-color: #f4f7f9; 
-          min-height: 100vh;
-          height: 100%;
-          display: flex;
-          width: 100%;
-          font-family: sans-serif;
+            background-color: #f4f7f9; 
+            min-height: 100vh;
+            height: 100%;
+            display: flex;
+            width: 100%;
         } 
-        /* [SIDEBAR UMUM] */
         .sidebar {
-          width: 280px; 
-          min-height: 100vh;
-          background-color: #212529; 
-          color: #fff;
-          padding-top: 20px;
-          box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
-          transition: width 0.3s;
-          flex-shrink: 0;
-          height: 100%; 
-          overflow-y: auto; 
+            width: 280px; 
+            min-height: 100vh;
+            height: 100%;
+            background-color: #212529; 
+            color: #fff;
+            padding-top: 20px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
+            transition: all 0.3s ease-in-out !important; 
+            flex-shrink: 0;
+            margin-right: 1px;
+            z-index: 1030;
         }
         .main-content {
-          flex-grow: 1;
-          padding: 30px; 
-          transition: margin-left 0.3s;
+            flex-grow: 1;
+            padding: 30px; 
+            transition: margin-left 0.3s, width 0.3s;
         }
         .sidebar a {
-          color: #adb5bd; 
-          padding: 10px 20px;
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          border-radius: 8px; 
-          transition: background-color 0.2s, color 0.2s;
+            color: #adb5bd; 
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+            border-radius: 8px; 
+            transition: background-color 0.2s, color 0.2s;
         }
         .sidebar a:hover, .sidebar .active > a {
-          background-color: #343a40; 
-          color: #ffffff;
+            background-color: #343a40; 
+            color: #ffffff;
         }
         .sidebar .parent-menu {
-          font-size: 0.8rem;
-          letter-spacing: 0.5px;
-          opacity: 0.6;
-          padding: 15px 20px 5px;
-          text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            padding: 15px 20px 5px;
+            text-transform: uppercase;
         }
         .nav-link i {
-          margin-right: 15px;
-          font-size: 1.1rem;
-          min-width: 20px;
-          text-align: center;
+            margin-right: 15px;
+            font-size: 1.1rem;
         }
         .sidebar .profile-header {
-          padding: 0 20px 20px;
-          border-bottom: 1px solid #343a40;
-          margin-bottom: 20px;
-          display: flex;
-          flex-direction: column; 
-          align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #343a40;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .sidebar .profile-header img.logo-header {
-          width: 60px; 
-          height: auto;
-          border: none;
-          padding: 0;
-          background-color: transparent; 
+            max-width: 90%; 
+            height: auto; 
+            border: none; 
+            padding: 10px;
+            background-color: white; 
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
         }
-        
-        /* ===== Mode collapsed (Desktop) ===== */
-        .sidebar.collapsed {
-          width: 80px;
-        }
-        .sidebar.collapsed .profile-header h5,
-        .sidebar.collapsed .profile-header small {
-          display: none;
-        }
-        .sidebar.collapsed .nav-link span {
-          display: none !important;
-        }
-        .sidebar.collapsed .nav-link {
-          justify-content: center;
-          padding: 12px 0;
-        }
-        .sidebar.collapsed .nav-link i {
-          margin-right: 0 !important;
-          font-size: 1.3rem;
-        }
-        .sidebar.collapsed .parent-menu {
-          display: none;
-        }
-        .sidebar.collapsed .toggle-btn {
-            margin: 0 auto 20px auto !important; 
-        }
-        .sidebar.collapsed .profile-header {
-             padding: 0 0 20px 0;
-        }
-        .sidebar.collapsed .profile-header img.logo-header {
-             margin-bottom: 10px;
-        }
-        .sidebar.collapsed .btn-outline-danger span { 
-            display: none !important;
-        }
-        .sidebar.collapsed .btn-outline-danger {
-            justify-content: center;
-        }
-        
-        /* [RESPONSIVE FIX] */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 80px !important; /* Paksa sempit di mobile */
-                position: fixed;
-                z-index: 1050;
-            }
-            .sidebar.collapsed {
-                width: 80px !important; /* Abaikan collapsed di mobile */
-            }
-            .main-content {
-                 margin-left: 80px; /* Geser konten utama */
-            }
-            /* Sembunyikan semua teks di mobile */
-            .sidebar .profile-header h5,
-            .sidebar .profile-header small,
-            .sidebar .nav-link span,
-            .sidebar .parent-menu,
-            .sidebar .btn-outline-danger span {
-                display: none !important;
-            }
-            /* Pusatkan semua ikon di mobile */
-            .sidebar a {
-                justify-content: center;
-                padding: 12px 0;
-            }
-            .sidebar a i {
-                margin-right: 0 !important;
-            }
-        }
-        
-        /* Toggle button */
-        .toggle-btn {
-          background: none;
-          border: none;
-          color: white;
-          font-size: 1.3rem;
-          margin: 0 15px 20px auto;
-          display: block;
-        }
-        
-        /* [Gaya Statistik] */
         .stat-card { min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; padding: 20px !important; align-items: flex-start; }
         .stat-main-figure { display: flex; align-items: center; width: 100%; margin-bottom: 5px; }
         .stat-detail { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; flex-grow: 1; }
@@ -188,19 +106,88 @@
         .row.mb-3 > .col-12 .stat-card { flex-direction: row; align-items: center; min-height: 100px; justify-content: flex-start;}
         .row.mb-3 > .col-12 .stat-main-figure { width: auto; }
         .row.mb-3 > .col-12 .stat-detail { margin-left: 20px; }
+
+        /* --- SIDEBAR TOGGLE & MOBILE FIX --- */
+
+        /* 1. Toggle State (Desktop) */
+        .sidebar.toggled { width: 65px !important; }
+        .sidebar.toggled .profile-header h5,
+        .sidebar.toggled .profile-header small,
+        .sidebar.toggled .menu-text, 
+        .sidebar.toggled .parent-menu,
+        .sidebar.toggled .btn-outline-danger { display: none !important; }
+        .sidebar.toggled a { text-align: center; padding-left: 0; padding-right: 0; }
+        .sidebar.toggled i { margin-right: 0; }
+        .main-content.toggled { margin-left: 65px; width: calc(100% - 65px); }
+        .sidebar.toggled .profile-header { justify-content: center; }
+
+        /* 2. Mobile Fix (Auto Narrow on small screens - Lebar < 992px) */
+        @media (max-width: 992px) { 
+            .sidebar {
+                width: 65px !important; 
+                padding-left: 0;
+                padding-right: 0;
+                position: fixed; 
+                left: 0;
+                z-index: 1030;
+                height: 100vh; 
+                min-height: 100vh;
+            }
+            
+            /* FIX FINAL: TARGET SEMUA TULISAN DAN PAKSA HILANG */
+            .sidebar .profile-header h5,
+            .sidebar .profile-header small,
+            .sidebar span, 
+            .sidebar .nav-item a span, 
+            .sidebar .parent-menu,
+            .sidebar .btn-outline-danger span {
+                display: none !important;
+            }
+
+            /* FIX: Menata Header di Mobile (Logo di pojok kiri atas) */
+            .sidebar .profile-header { padding: 5px 0 15px; justify-content: center; }
+            .sidebar .profile-header img.logo-header {
+                width: 40px !important; 
+                height: 40px;
+                margin: 0 auto;
+            }
+
+            /* FIX: Memastikan tombol Sign Out tetap berupa icon di pojok bawah */
+            .sidebar .btn-outline-danger {
+                width: 45px;
+                height: 45px;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: 10px !important;
+                margin-right: 10px !important;
+            }
+            .sidebar .btn-outline-danger i {
+                margin-right: 0 !important;
+            }
+
+            .main-content {
+                margin-left: 65px; 
+                width: calc(100% - 65px); 
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="d-flex w-100"> 
-        <div class="sidebar d-flex flex-column" id="sidebar">
+        <div class="sidebar d-flex flex-column" id="appSidebar">
             
-            <button class="toggle-btn d-none d-lg-block" id="toggleBtn"><i class="bi bi-list"></i></button>
-
-            <div class="profile-header text-center">
-                <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header mb-2">
-                <h5 class="text-white fw-bold mb-0">Teknik Industri</h5>
-                <small class="text-muted">Universitas X</small>
+            <div class="profile-header">
+                <div class="d-flex align-items-center">
+                    <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header me-2">
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Teknik Industri</h5>
+                        <small class="text-muted">Universitas X</small>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-outline-light" id="toggleBtn"><i class="bi bi-list"></i></button>
             </div>
             
             <ul class="nav nav-pills flex-column mb-auto px-3">
@@ -217,8 +204,8 @@
                     </a>
                     <div class="collapse show" id="laporanSubMenu">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="upload-laporan.html" class="nav-link rounded"><i class="bi bi-cloud-arrow-up-fill me-2"></i> <span>Upload File Laporan</span></a></li>
-                            <li><a href="laporan-kegiatan.html" class="nav-link rounded"><i class="bi bi-list-check me-2"></i> <span>Lihat Daftar Laporan</span></a></li> 
+                            <li><a href="upload-laporan.html" class="nav-link rounded ps-5"><i class="bi bi-cloud-arrow-up-fill me-2"></i> <span>Upload File Laporan</span></a></li>
+                            <li><a href="laporan-kegiatan.html" class="nav-link rounded ps-5"><i class="bi bi-list-check me-2"></i> <span>Lihat Daftar Laporan</span></a></li> 
                         </ul>
                     </div>
                 </li>
@@ -235,7 +222,7 @@
             </a>
         </div>
         
-        <div class="main-content flex-grow-1">
+        <div class="main-content flex-grow-1" id="mainContent">
             <div class="container-fluid">
                 <h1 class="fw-light text-dark mb-4">Dashboard</h1>
                 
@@ -307,27 +294,23 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- LOGIC TOGGLE SIDEBAR (Hanya Aktif di Desktop) ---
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- FUNGSI TOGGLE SIDEBAR UNTUK DESKTOP ---
+        document.getElementById('toggleBtn').addEventListener('click', () => {
             const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggleBtn');
+            const mainContent = document.getElementById('mainContent');
             
-            // Logika Toggle hanya berjalan di layar desktop (>768px)
-            if (toggleBtn && window.innerWidth > 768) {
-                toggleBtn.addEventListener('click', () => {
-                    sidebar.classList.toggle('collapsed');
-                });
-            }
-            
-            // Pada Mobile (<= 768px), pastikan sidebar dalam mode collapsed (icon)
-            if (window.innerWidth <= 768) {
-                 sidebar.classList.add('collapsed');
+            // Toggle hanya berlaku di layar desktop (>768px)
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+            } else {
+                 // Di mobile, ini berfungsi sebagai pembuka/penutup penuh
+                 sidebar.classList.toggle('active-mobile-open');
             }
         });
         
-        // --- Fungsi untuk memuat data statistik (Dikosongkan untuk brevity) ---
+        // --- Fungsi untuk memuat data statistik ---
         async function loadStatistics() {
-            // Placeholder/Logic Anda untuk memuat data statistik dari Firebase
+            // ... (Logika statistik Anda) ...
         }
         
         // --- PENGAMANAN HALAMAN DAN PEMERIKSAAN ROLE ---
@@ -346,7 +329,6 @@
                 return;
             }
 
-            // Panggil fungsi statistik setelah login berhasil
             loadStatistics();
         });
     </script>
