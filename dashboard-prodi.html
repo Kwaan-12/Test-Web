@@ -29,7 +29,7 @@
     </script>
     
     <style>
-        /* CSS BARU DARI USER */
+        /* [GAYA UMUM] */
         html { height: 100%; }
         body { 
           background-color: #f4f7f9; 
@@ -39,6 +39,7 @@
           width: 100%;
           font-family: sans-serif;
         } 
+        /* [SIDEBAR UMUM] */
         .sidebar {
           width: 280px; 
           min-height: 100vh;
@@ -48,11 +49,8 @@
           box-shadow: 5px 0 15px rgba(0,0,0,0.1); 
           transition: width 0.3s;
           flex-shrink: 0;
-          height: 100%; /* FIX: Memastikan tinggi penuh */
-          overflow-y: auto; /* Memungkinkan scroll sidebar */
-        }
-        .sidebar.collapsed {
-          width: 80px;
+          height: 100%; 
+          overflow-y: auto; 
         }
         .main-content {
           flex-grow: 1;
@@ -90,18 +88,21 @@
           border-bottom: 1px solid #343a40;
           margin-bottom: 20px;
           display: flex;
-          flex-direction: column; /* FIX: Atur logo dan teks di bawahnya */
+          flex-direction: column; 
           align-items: center;
         }
         .sidebar .profile-header img.logo-header {
-          width: 60px; /* Diperkecil agar pas */
+          width: 60px; 
           height: auto;
           border: none;
           padding: 0;
           background-color: transparent; 
         }
         
-        /* ===== Mode collapsed ===== */
+        /* ===== Mode collapsed (Desktop) ===== */
+        .sidebar.collapsed {
+          width: 80px;
+        }
         .sidebar.collapsed .profile-header h5,
         .sidebar.collapsed .profile-header small {
           display: none;
@@ -121,7 +122,7 @@
           display: none;
         }
         .sidebar.collapsed .toggle-btn {
-            margin: 0 auto 20px auto !important; /* Pindahkan tombol ke tengah saat collapsed */
+            margin: 0 auto 20px auto !important; 
         }
         .sidebar.collapsed .profile-header {
              padding: 0 0 20px 0;
@@ -129,27 +130,44 @@
         .sidebar.collapsed .profile-header img.logo-header {
              margin-bottom: 10px;
         }
-        .sidebar.collapsed .btn-outline-danger span { /* Tombol Sign Out di mode collapsed */
+        .sidebar.collapsed .btn-outline-danger span { 
             display: none !important;
         }
         .sidebar.collapsed .btn-outline-danger {
             justify-content: center;
         }
         
-        /* Responsive: default collapse on mobile */
+        /* [RESPONSIVE FIX] */
         @media (max-width: 768px) {
             .sidebar {
-                width: 80px; /* Default narrow on mobile */
+                width: 80px !important; /* Paksa sempit di mobile */
                 position: fixed;
                 z-index: 1050;
             }
             .sidebar.collapsed {
-                width: 280px; /* Dibuka penuh saat collapsed */
+                width: 80px !important; /* Abaikan collapsed di mobile */
             }
             .main-content {
-                 margin-left: 80px; /* FIX: Sisakan ruang untuk sidebar sempit */
+                 margin-left: 80px; /* Geser konten utama */
+            }
+            /* Sembunyikan semua teks di mobile */
+            .sidebar .profile-header h5,
+            .sidebar .profile-header small,
+            .sidebar .nav-link span,
+            .sidebar .parent-menu,
+            .sidebar .btn-outline-danger span {
+                display: none !important;
+            }
+            /* Pusatkan semua ikon di mobile */
+            .sidebar a {
+                justify-content: center;
+                padding: 12px 0;
+            }
+            .sidebar a i {
+                margin-right: 0 !important;
             }
         }
+        
         /* Toggle button */
         .toggle-btn {
           background: none;
@@ -159,7 +177,8 @@
           margin: 0 15px 20px auto;
           display: block;
         }
-        /* Gaya Statistik (Sama seperti sebelumnya) */
+        
+        /* [Gaya Statistik] */
         .stat-card { min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; padding: 20px !important; align-items: flex-start; }
         .stat-main-figure { display: flex; align-items: center; width: 100%; margin-bottom: 5px; }
         .stat-detail { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; flex-grow: 1; }
@@ -176,7 +195,7 @@
     <div class="d-flex w-100"> 
         <div class="sidebar d-flex flex-column" id="sidebar">
             
-            <button class="toggle-btn" id="toggleBtn"><i class="bi bi-list"></i></button>
+            <button class="toggle-btn d-none d-lg-block" id="toggleBtn"><i class="bi bi-list"></i></button>
 
             <div class="profile-header text-center">
                 <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header mb-2">
@@ -288,15 +307,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- FUNGSI TOGGLE SIDEBAR UNTUK DESKTOP ---
-        document.getElementById('toggleBtn').addEventListener('click', () => {
+        // --- LOGIC TOGGLE SIDEBAR (Hanya Aktif di Desktop) ---
+        document.addEventListener('DOMContentLoaded', () => {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
+            const toggleBtn = document.getElementById('toggleBtn');
+            
+            // Logika Toggle hanya berjalan di layar desktop (>768px)
+            if (toggleBtn && window.innerWidth > 768) {
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                });
+            }
+            
+            // Pada Mobile (<= 768px), pastikan sidebar dalam mode collapsed (icon)
+            if (window.innerWidth <= 768) {
+                 sidebar.classList.add('collapsed');
+            }
         });
         
-        // --- Fungsi untuk memuat data statistik ---
+        // --- Fungsi untuk memuat data statistik (Dikosongkan untuk brevity) ---
         async function loadStatistics() {
-            // ... (Logika statistik Anda) ...
+            // Placeholder/Logic Anda untuk memuat data statistik dari Firebase
         }
         
         // --- PENGAMANAN HALAMAN DAN PEMERIKSAAN ROLE ---
@@ -315,6 +346,7 @@
                 return;
             }
 
+            // Panggil fungsi statistik setelah login berhasil
             loadStatistics();
         });
     </script>
