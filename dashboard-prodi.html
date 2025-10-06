@@ -1,90 +1,131 @@
-Siap, Dzakwan! Berikut ini adalah **full HTML lengkap** yang sudah saya refactor dan satukan berdasarkan semua skrip dan struktur yang kamu kirim sebelumnya. Kamu bisa langsung copy dan deploy:
-
-```html
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard Penilaian Ormawa | Prodi</title>
-
-  <!-- Bootstrap & Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: sans-serif;
+    html, body { height: 100%; }
+    body {
       background-color: #f4f7f9;
+      display: flex;
+      width: 100%;
+      font-family: sans-serif;
     }
     .sidebar {
       width: 280px;
       background-color: #212529;
       color: #fff;
-      transition: all 0.3s ease;
-      min-height: 100vh;
-      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: width 0.3s;
+      height: 100vh;
+      position: sticky;
+      top: 0;
       overflow-y: auto;
-      position: relative;
-      z-index: 1050;
+      flex-shrink: 0;
     }
     .sidebar.collapsed {
       width: 80px;
     }
-    .sidebar.mobile-open {
-      width: 280px;
+    .main-content {
+      flex-grow: 1;
+      padding: 30px;
     }
-    .sidebar .nav-link span,
-    .sidebar .profile-header h5,
-    .sidebar .profile-header small,
+    .sidebar a {
+      color: #adb5bd;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .sidebar a:hover, .sidebar .active > a {
+      background-color: #343a40;
+      color: #fff;
+    }
     .sidebar .parent-menu {
-      transition: opacity 0.3s ease;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
+      padding: 15px 20px 5px;
+      text-transform: uppercase;
     }
-    .sidebar.collapsed .nav-link span,
+    .nav-link i {
+      margin-right: 15px;
+      font-size: 1.1rem;
+      min-width: 20px;
+      text-align: center;
+    }
+    .sidebar .profile-header {
+      padding: 20px;
+      border-bottom: 1px solid #343a40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sidebar .profile-header img.logo-header {
+      width: 60px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    /* collapsed desktop */
     .sidebar.collapsed .profile-header h5,
     .sidebar.collapsed .profile-header small,
-    .sidebar.collapsed .parent-menu {
-      opacity: 0;
-      pointer-events: none;
+    .sidebar.collapsed .nav-link span,
+    .sidebar.collapsed .parent-menu,
+    .sidebar.collapsed .btn-outline-danger span {
+      display: none !important;
     }
+    .sidebar.collapsed .nav-link {
+      justify-content: center;
+      padding: 12px 0;
+    }
+    .sidebar.collapsed .nav-link i {
+      margin-right: 0 !important;
+      font-size: 1.3rem;
+    }
+    .sidebar.collapsed .btn-outline-danger {
+      justify-content: center;
+    }
+
+    /* Toggle button */
     .toggle-btn {
       background: none;
       border: none;
       color: white;
       font-size: 1.3rem;
-      margin: 0 15px 20px auto;
+      margin-left: auto;
+      margin-right: 15px;
+      margin-bottom: 15px;
       display: block;
+      align-self: flex-end;
     }
-    .main-content {
-      padding: 30px;
-      transition: margin-left 0.3s ease;
-      flex-grow: 1;
-    }
-    .sidebar-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1040;
-      display: none;
-    }
-    .sidebar.mobile-open ~ .sidebar-overlay {
-      display: block;
-    }
+
+    /* mobile mode */
     @media (max-width: 768px) {
       .sidebar {
+        width: 80px; /* default kecil */
         position: fixed;
-        width: 80px;
+        left: 0;
+        top: 0;
+        z-index: 1050;
+      }
+      .sidebar.mobile-open {
+        width: 280px; /* expand */
+      }
+      .sidebar.mobile-open .nav-link {
+        justify-content: flex-start;
+      }
+      .sidebar.mobile-open .nav-link span {
+        display: inline !important;
+        margin-left: 5px;
       }
       .main-content {
         margin-left: 80px;
@@ -93,106 +134,128 @@ Siap, Dzakwan! Berikut ini adalah **full HTML lengkap** yang sudah saya refactor
         margin-left: 280px;
       }
     }
+
+    /* sign out sticky di bawah */
+    .signout-btn {
+      position: sticky;
+      bottom: 20px;
+      margin: 0 20px 20px 20px;
+    }
+
+    /* Statistik Cards */
+    .stat-card { 
+      min-height: 150px; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: space-between; 
+      padding: 20px !important; 
+      align-items: flex-start; 
+    }
+    .stat-main-figure { display: flex; align-items: center; width: 100%; margin-bottom: 5px; }
+    .stat-detail { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; flex-grow: 1; }
+    .stat-card i { font-size: 3rem !important; margin-right: 15px; min-width: 50px; }
+    .stat-detail-text { padding-left: 0; display: block; font-weight: bold; margin-left: 65px; margin-top: 5px; line-height: 1.2;}
   </style>
 </head>
+
 <body>
-  <div class="d-flex w-100">
-    <aside class="sidebar d-flex flex-column" id="sidebar">
+  <div class="sidebar d-flex flex-column" id="sidebar">
+    <div>
       <button class="toggle-btn" id="toggleBtn"><i class="bi bi-list"></i></button>
       <div class="profile-header text-center">
-        <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header mb-2" style="width:60px;" />
+        <img src="images/Logo-Program-Studi-Teknik-Industri.png" alt="Logo Teknik Industri" class="img-fluid logo-header">
         <h5 class="text-white fw-bold mb-0">Teknik Industri</h5>
         <small class="text-muted">Universitas X</small>
       </div>
-      <nav class="nav flex-column px-3">
-        <div class="parent-menu">Menu Utama</div>
-        <a href="dashboard-prodi.html" class="nav-link active">
-          <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
-        </a>
-        <a href="#laporanSubMenu" data-bs-toggle="collapse" class="nav-link">
-          <i class="bi bi-folder-fill"></i> <span>Laporan Kegiatan</span>
-        </a>
-        <div class="collapse show" id="laporanSubMenu">
-          <a href="upload-laporan.html" class="nav-link"><i class="bi bi-cloud-arrow-up-fill"></i> <span>Upload File</span></a>
-          <a href="laporan-kegiatan.html" class="nav-link"><i class="bi bi-list-check"></i> <span>Lihat Daftar</span></a>
-        </div>
-        <a href="#" class="nav-link">
-          <i class="bi bi-heart-pulse-fill"></i> <span>Laporan Kondisi</span>
-        </a>
-      </nav>
-      <div class="mt-auto px-3">
-        <a href="index.html" class="btn btn-outline-danger w-100">
-          <i class="bi bi-box-arrow-right"></i> <span>Sign Out</span>
-        </a>
-      </div>
-    </aside>
+      <ul class="nav nav-pills flex-column mb-auto px-3">
+        <li class="nav-item active">
+          <a href="dashboard-prodi.html" class="nav-link active">
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="parent-menu">Menu Utama</li>
+        <li class="nav-item">
+          <a href="#laporanSubMenu" data-bs-toggle="collapse" class="nav-link collapsed">
+            <i class="bi bi-folder-fill"></i> <span>Laporan Kegiatan</span>
+          </a>
+          <div class="collapse" id="laporanSubMenu">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="upload-laporan.html" class="nav-link rounded"><i class="bi bi-cloud-arrow-up-fill me-2"></i> <span>Upload File Laporan</span></a></li>
+              <li><a href="laporan-kegiatan.html" class="nav-link rounded"><i class="bi bi-list-check me-2"></i> <span>Lihat Daftar Laporan</span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="bi bi-heart-pulse-fill"></i> <span>Laporan Kondisi</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <a href="index.html" class="btn btn-outline-danger signout-btn d-flex">
+      <i class="bi bi-box-arrow-right me-2"></i> <span>Sign Out</span>
+    </a>
+  </div>
 
-    <main class="main-content flex-grow-1">
-      <div class="container-fluid">
-        <h1 class="fw-light text-dark mb-4">Dashboard</h1>
-        <div class="row mb-3">
-          <div class="col-12">
-            <div class="card shadow-lg border-0 bg-white p-4">
-              <div class="d-flex align-items-center">
-                <i class="bi bi-journal-richtext text-primary fs-1 me-3"></i>
-                <div>
-                  <h5 class="text-muted mb-1">Total Laporan</h5>
-                  <h2 class="fw-bold text-primary" id="totalLaporan">0</h2>
-                  <span class="text-success small" id="totalLaporanBulanIni">+0 Bulan Ini</span>
-                </div>
+  <div class="main-content flex-grow-1">
+    <div class="container-fluid">
+      <h1 class="fw-light text-dark mb-4">Dashboard</h1>
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="card shadow-lg border-0 bg-white stat-card">
+            <div class="stat-main-figure">
+              <i class="bi bi-journal-richtext text-primary"></i>
+              <div class="stat-detail">
+                <h5 class="card-title text-muted fw-normal mb-0">Total Laporan</h5>
+                <h2 class="card-subtitle fw-bold text-primary display-4" id="totalLaporan">0</h2>
+              </div>
+            </div>
+            <div class="ms-auto pt-2">
+              <span class="stat-detail-text text-success small" id="totalLaporanBulanIni">+0 Bulan Ini</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-md-6 mb-3">
+          <div class="card shadow-sm border-0 bg-white stat-card">
+            <div class="stat-main-figure">
+              <i class="bi bi-calendar-check text-success"></i>
+              <div class="stat-detail">
+                <h5 class="card-title text-muted fw-normal mb-0">Kegiatan Terverifikasi</h5>
+                <h2 class="card-subtitle fw-bold text-success" id="kegiatanDisetujui">0</h2>
               </div>
             </div>
           </div>
         </div>
-        <div class="card shadow-lg p-4 border-0">
-          <div class="card-body">
-            <h4 class="card-title text-secondary mb-3"><i class="bi bi-megaphone-fill me-2 text-warning"></i> Pengumuman Terbaru</h4>
-            <div class="alert alert-primary border-start border-4 border-primary" role="alert">
-              <strong>Penting!</strong> Batas waktu pengunggahan laporan bulan ini adalah tanggal 30.
+        <div class="col-md-6 mb-3">
+          <div class="card shadow-sm border-0 bg-white stat-card">
+            <div class="stat-main-figure">
+              <i class="bi bi-clock-fill text-warning"></i>
+              <div class="stat-detail">
+                <h5 class="card-title text-muted fw-normal mb-0">Menunggu Verifikasi</h5>
+                <h2 class="card-subtitle fw-bold text-warning" id="kegiatanPending">0</h2>
+              </div>
             </div>
+            <span class="stat-detail-text text-muted small">Persetujuan Koordinator</span>
           </div>
         </div>
       </div>
-    </main>
+      <div class="card shadow-lg p-4 border-0">
+        <div class="card-body">
+          <h4 class="card-title text-secondary mb-3"><i class="bi bi-megaphone-fill me-2 text-warning"></i> Pengumuman Terbaru</h4>
+          <div class="alert alert-primary border-start border-4 border-primary" role="alert">
+            <strong>Penting!</strong> Batas waktu pengunggahan laporan bulan ini adalah tanggal 30.
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Firebase Init -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBWH491KDjzgpG0i_PeVDq4t5RPx7sSEMs",
-      authDomain: "penilaian-ormawa.firebaseapp.com",
-      projectId: "penilaian-ormawa",
-      storageBucket: "penilaian-ormawa.appspot.com",
-      messagingSenderId: "1072011483641",
-      appId: "1:1072011483641:web:c8a16cd0a9d53408e28528"
-    };
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = app.auth();
-    const db = app.firestore();
-  </script>
-
-  <!-- Sidebar Logic -->
   <script>
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleBtn');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-    function updateSidebarState() {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.remove('collapsed');
-        sidebar.classList.remove('mobile-open');
-      } else {
-        sidebar.classList.remove('mobile-open');
-        sidebar.classList.remove('collapsed');
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', updateSidebarState);
-    window.addEventListener('resize', updateSidebarState);
 
     toggleBtn.addEventListener('click', () => {
       if (window.innerWidth <= 768) {
@@ -202,48 +265,10 @@ Siap, Dzakwan! Berikut ini adalah **full HTML lengkap** yang sudah saya refactor
       }
     });
 
-    sidebarOverlay.addEventListener('click', () => {
-      sidebar.classList.remove('mobile-open');
-    });
-  </script>
-
-  <!-- Statistik & Role Check -->
-  <script>
-    auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        window.location.replace('index.html');
-        return;
-      }
-
-      try {
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const userData = userDoc.data();
-
-        if (userData.role !== 'prodi') {
-          window.location.replace('index.html');
-          return;
-        }
-
-        // Ambil semua laporan dari Firestore
-        const laporanSnapshot = await db.collection('laporan')
-          .where('prodi', '==', userData.prodi)
-          .get();
-
-        // Hitung total laporan
-        const totalLaporan = laporanSnapshot.size;
-        document.getElementById('totalLaporan').textContent = totalLaporan;
-
-        // Hitung laporan bulan ini
-        const bulanIni = new Date().getMonth();
-        const laporanBulanIni = laporanSnapshot.docs.filter(doc => {
-          const tanggal = doc.data().tanggal?.toDate?.();
-          return tanggal && tanggal.getMonth() === bulanIni;
-        }).length;
-        document.getElementById('totalLaporanBulanIni').textContent = `+${laporanBulanIni} Bulan Ini`;
-
-      } catch (error) {
-        console.error('Gagal memuat data:', error);
-        alert('Terjadi kesalahan saat memuat data. Silakan coba lagi nanti.');
+    // default mobile collapsed
+    window.addEventListener('load', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove('mobile-open');
       }
     });
   </script>
