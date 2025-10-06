@@ -59,6 +59,7 @@
             padding: 30px; 
             transition: margin-left 0.3s, width 0.3s;
         }
+        /* Style Navigasi dan Profile */
         .sidebar a {
             color: #adb5bd; 
             padding: 10px 20px;
@@ -111,7 +112,7 @@
         .row.mb-3 > .col-12 .stat-main-figure { width: auto; }
         .row.mb-3 > .col-12 .stat-detail { margin-left: 20px; }
 
-        /* ===== Mode collapsed (Desktop) - Mengembalikan ke style lama ===== */
+        /* ===== Mode collapsed (Desktop) - MEMPERBAIKI MARGIN KONTEN UTAMA ===== */
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .profile-header h5,
         .sidebar.collapsed .profile-header small { display: none; }
@@ -123,13 +124,16 @@
         .sidebar.collapsed .profile-header { padding: 0 0 20px 0; }
         .sidebar.collapsed .profile-header img.logo-header { margin-bottom: 10px; }
         .sidebar.collapsed .btn-outline-danger span { display: none !important; }
-        .sidebar.collapsed .btn-outline-danger { justify-content: center; }
-        
+        .sidebar.collapsed .btn-outline-danger { justify-content: center; width: 45px; height: 45px; padding: 0; }
+
+        .sidebar.collapsed ~ .main-content {
+             margin-left: 80px; /* FIX: Geser konten saat sidebar sempit */
+        }
+
         /* [RESPONSIVE FIX - MOBILE] */
         @media (max-width: 768px) {
-            /* FIX: Mengatur sidebar agar fixed dan sempit di mobile */
             .sidebar {
-                width: 80px; 
+                width: 80px; /* Default narrow on mobile */
                 position: fixed;
                 z-index: 1050;
             }
@@ -140,20 +144,13 @@
                  margin-left: 80px; /* Sisakan ruang untuk sidebar sempit */
             }
             
-            /* CSS UNTUK MENYEMBUNYIKAN TEKS DI MOBILE (Default) */
+            /* Sembunyikan semua teks di mobile (default) */
             .sidebar:not(.collapsed) .profile-header h5,
             .sidebar:not(.collapsed) .profile-header small,
             .sidebar:not(.collapsed) .nav-link span,
             .sidebar:not(.collapsed) .parent-menu,
             .sidebar:not(.collapsed) .btn-outline-danger span {
                 display: none !important;
-            }
-            /* Tombol Sign Out di mobile */
-            .sidebar .btn-outline-danger {
-                width: 45px; height: 45px; padding: 0; display: flex; justify-content: center; margin: 0 auto 15px auto;
-            }
-            .sidebar .btn-outline-danger i {
-                margin-right: 0 !important;
             }
         }
         /* Toggle button */
@@ -212,7 +209,7 @@
             </a>
         </div>
         
-        <div class="content" id="mainContent">
+        <div class="main-content flex-grow-1" id="mainContent">
             <div class="container-fluid">
                 <h1 class="fw-light text-dark mb-4">Dashboard</h1>
                 
@@ -233,12 +230,11 @@
                 const isMobile = window.innerWidth <= 768;
                 
                 if (isMobile) {
-                    // Mobile: Toggle mode buka/tutup (collapsed = terbuka)
+                    // Mobile: Toggle mode buka/tutup
                     sidebar.classList.toggle("collapsed"); 
                 } else {
                     // Desktop: Toggle mode icon/penuh
                     sidebar.classList.toggle("collapsed");
-                    mainContent.classList.toggle("collapsed");
                 }
             });
             
