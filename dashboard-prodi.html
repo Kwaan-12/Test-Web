@@ -54,12 +54,11 @@
             overflow-y: auto;
         }
         .main-content {
-            margin-left: 280px; /* FIX: Default margin untuk desktop */
+            margin-left: 280px;
             flex-grow: 1;
             padding: 30px; 
             transition: margin-left 0.3s, width 0.3s;
         }
-        /* Style Navigasi dan Profile */
         .sidebar a {
             color: #adb5bd; 
             padding: 10px 20px;
@@ -112,7 +111,7 @@
         .row.mb-3 > .col-12 .stat-main-figure { width: auto; }
         .row.mb-3 > .col-12 .stat-detail { margin-left: 20px; }
 
-        /* ===== Mode collapsed (Desktop) - MEMPERBAIKI MARGIN KONTEN UTAMA ===== */
+        /* ===== Mode collapsed (Desktop) ===== */
         .sidebar.collapsed { width: 80px; }
         .sidebar.collapsed .profile-header h5,
         .sidebar.collapsed .profile-header small { display: none; }
@@ -124,16 +123,17 @@
         .sidebar.collapsed .profile-header { padding: 0 0 20px 0; }
         .sidebar.collapsed .profile-header img.logo-header { margin-bottom: 10px; }
         .sidebar.collapsed .btn-outline-danger span { display: none !important; }
-        .sidebar.collapsed .btn-outline-danger { justify-content: center; width: 45px; height: 45px; padding: 0; }
-
+        .sidebar.collapsed .btn-outline-danger { justify-content: center; }
+        
+        /* FIX: Geser konten saat collapsed di desktop */
         .sidebar.collapsed ~ .main-content {
-             margin-left: 80px; /* FIX: Geser konten saat sidebar sempit */
+             margin-left: 80px;
         }
 
         /* [RESPONSIVE FIX - MOBILE] */
         @media (max-width: 768px) {
             .sidebar {
-                width: 80px; /* Default narrow on mobile */
+                width: 80px; 
                 position: fixed;
                 z-index: 1050;
             }
@@ -151,6 +151,13 @@
             .sidebar:not(.collapsed) .parent-menu,
             .sidebar:not(.collapsed) .btn-outline-danger span {
                 display: none !important;
+            }
+            /* Tombol Sign Out di mobile */
+            .sidebar .btn-outline-danger {
+                width: 45px; height: 45px; padding: 0; display: flex; justify-content: center; margin: 0 auto 15px auto;
+            }
+            .sidebar .btn-outline-danger i {
+                margin-right: 0 !important;
             }
         }
         /* Toggle button */
@@ -230,11 +237,12 @@
                 const isMobile = window.innerWidth <= 768;
                 
                 if (isMobile) {
-                    // Mobile: Toggle mode buka/tutup
+                    // Mobile: Toggle mode buka/tutup (collapsed = terbuka)
                     sidebar.classList.toggle("collapsed"); 
                 } else {
                     // Desktop: Toggle mode icon/penuh
                     sidebar.classList.toggle("collapsed");
+                    mainContent.classList.toggle("collapsed");
                 }
             });
             
